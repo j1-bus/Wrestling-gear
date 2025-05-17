@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');</style>
+        <link rel="stylesheet" type="text/css" href="../css/Signup.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Регистрация</title>
+    </head>
+    <body>
+        <div id="background">
+            <!-- Форма входа -->
+            <form id="loginForm">
+                <h2>Вход в аккаунт</h2>
+                <label for="username">Имя пользователя:</label>
+                <input type="text" id="username" name="username"placeholder="Введите имя пользователя" required>
+                
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" placeholder="Придумайте пароль" required>
+
+                <label for="password2">Пароль:</label>
+                <input type="password" id="password2" name="password" placeholder="Повторите пароль" required>
+                
+                <input type="submit" value="Войти">
+    
+                <a align="center" href="../html/Login.html">Уже есть аккаунт? Войти</a>
+            </form>
+            
+            <!-- Уведомление -->
+            <div id="notification" class="notification">
+                <span>Вы успешно вошли в аккаунт</span>
+                <button onclick="goToHomePage()">На главную</button>
+            </div>
+            
+            <script>
+                // Обработка отправки формы
+                document.getElementById('loginForm').addEventListener('submit', function(event) {
+                    event.preventDefault(); // Предотвращаем стандартную отправку формы
+                    
+                    // Показываем уведомление
+                    document.getElementById('notification').style.display = 'flex';
+                    
+                });
+                
+                // Функция для перехода на главную страницу
+                function goToHomePage() {
+                    window.location.href = "../index.html";
+                }
+            </script>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');</style>
+    <link rel="stylesheet" type="text/css" href="../css/Cart.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина</title>
+</head>
+<body>
+    <header>
+        <div id="header">
+            <div id="h1"><img id="hlogo" src="../img/Логотип.png"></div>
+            <div id="h2"></div>
+            <div id="links">
+                <div id="h3"><a class="headlink" href="../index.html">Главная</a></div>
+                <div id="h4"><a class="headlink" href="../html/Catalog.html">Каталог</a></div>
+                <div id="h5"><a class="headlink" href="../html/Cart.html">Корзина</a></div>
+                <div id="h6"><a class="headlink" href="#contacts">Контакты</a></div>
+            </div>
+            <div id="h7"><a href="../html/Login.html"><img id="login" src="../img/Профиль.png"></a></div>
+        </div>
+    </header>
+    <main>
+        <div class="cart-header">
+            <h1 id="yourcart">Ваша корзина</h1>
+            <a href="../html/Catalog.html" class="back-link">Вернуться в магазин</a>
+        </div>
+
+        <div id="cart-items">
+            <!-- Товары будут добавляться сюда -->
+        </div>
+
+        <div id="cart-total" style="text-align: center; margin: 20px;">
+            <h3>Итог: <span id="total-price">0 ₽</span></h3>
+            <button id="checkout-btn" style="padding: 10px 20px; font-size: 16px;  color: white; border: none; cursor: pointer;">Оплатить</button>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const container = document.getElementById('cart-items');
+                const totalPriceElement = document.getElementById('total-price');
+                const checkoutBtn = document.getElementById('checkout-btn');
+
+                if (cart.length === 0) {
+                    container.innerHTML = '<p>Корзина пуста</p>';
+                    return;
+                }
+
+                let totalPrice = 0;
+                cart.forEach((item, index) => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <div class="item-info">
+                            <img src="${item.image}" class="item-image" alt="${item.name}">
+                            <div class="item-details">
+                                <h3>${item.name}</h3>
+                                <div class="item-size">Размер: ${item.size}</div>
+                                <div class="item-price">${item.price} ₽</div>
+                            </div>
+                        </div>
+                        <button class="remove-item" data-index="${index}">Удалить</button>
+                    `;
+                    container.appendChild(cartItem);
+                    totalPrice += parseInt(item.price);
+                });
+
+                totalPriceElement.textContent = totalPrice + ' ₽';
+
+                // Обработчик удаления товара
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const index = e.target.dataset.index;
+                        cart.splice(index, 1);
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        location.reload(); // Перезагрузка страницы для обновления
+                    });
+                });
+
+                // Обработчик кнопки "Оплатить"
+                checkoutBtn.addEventListener('click', () => {
+                    if (cart.length > 0) {
+                        window.location.href = '../html/Checkout.html';
+                    } else {
+                        alert('Корзина пуста!');
+                    }
+                });
+            });
+        </script>
+    </main>
+    <footer>
+        <p><a name="contacts"></a></p>
+        <div id="footer">
+            <div id="foot1">
+                <div id="adress"><p>Пгт. Октябрьское ул. Виноградная, 4</p></div>
+                <div id="number"><p>+7 (978) 777 77 77 / wrestgear@mail.ru</p></div>
+                <div id="logo"><img id="infimg1" src="../img/Логотип.png"></div>
+                <div id="apps">
+                    <a href="https://www.instagram.com/ismailmuzguli?igsh=NmJlZWg2dWxrN21y&utm_source=qr"><img class="conimg" src="../img/Инст.png"></a>
+                    <a href="https://t.me/j11bus57"><img class="conimg" src="../img/Тг.png"></a>
+                    <a href="https://vk.com/j1bus"><img class="conimg" src="../img/Вк.png"></a>
+                </div>
+                <div id="ooo"><p>2022-2025 OOO "wwwwww". Все права защищены.<br> Перепечатка и любое использование материалов возможно только <br> при наличии ссылки на первоисточник.</p></div>
+            </div>
+            <div id="foot2">
+                <h3>Навигация по сайту</h3>
+                <a class="flink" href="../html/Login.html">Регистрация/Вход</a>
+                <a class="flink" href="../index.html">На главную</a>
+                <a class="flink" href="../html/Catalog.html">Каталог</a>
+                <a class="flink" href="../html/Cart.html">Корзина</a>
+                <a class="flink">Техническая поддержка</a>
+                <a class="flink">Мобильное приложение</a>
+                <a class="flink">Часто задаваемые вопросы</a>
+            </div>
+            <div id="foot3">
+                <h3>О компании</h3>
+                <p>Контакты</p>
+                <p>Акции</p>
+                <p>Отзывы</p>
+                <p>Блог</p>
+                <p>Сотрудничество</p>
+                <p>Вакансии</p>
+                <p>Политика конфиденциальности</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

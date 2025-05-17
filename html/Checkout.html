@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');</style>
+    <link rel="stylesheet" type="text/css" href="../css/Catalog.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа</title>
+</head>
+<body>
+    <header>
+        <div id="header">
+            <div id="h1"><img id="hlogo" src="../img/Логотип.png"></div>
+            <div id="h2"></div>
+            <div id="links">
+                <div id="h3"><a class="headlink" href="../index.html">Главная</a></div>
+                <div id="h4"><a class="headlink" href="../html/Catalog.html">Каталог</a></div>
+                <div id="h5"><a class="headlink" href="../html/Cart.html">Корзина</a></div>
+                <div id="h6"><a class="headlink" href="#contacts">Контакты</a></div>
+            </div>
+            <div id="h7"><a href="../html/Login.html"><img id="login" src="../img/Профиль.png"></a></div>
+        </div>
+    </header>
+    <main>
+        <div class="checkout-container">
+            <h1>Оформление заказа</h1>
+
+            <div class="order-details">
+                <h2>Выберите товары для оплаты</h2>
+                <div id="selected-items">
+                    <!-- Товары будут добавляться сюда -->
+                </div>
+                <div id="total-price" style="margin-top: 20px; font-size: 18px;">
+                    Итог: <span id="total-amount">0 ₽</span>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Адрес доставки</h2>
+                <input type="text" id="address" placeholder="Введите адрес доставки" required>
+
+                <h2>Данные карты</h2>
+                <input type="text" id="card-number" placeholder="Номер карты (16 цифр)" pattern="\d{16}" required>
+                <input type="text" id="card-holder" placeholder="Имя владельца карты" required>
+                <input type="text" id="expiry-date" placeholder="MM/YY" pattern="\d{2}/\d{2}" required>
+                <input type="text" id="cvv" placeholder="CVV (3 цифры)" pattern="\d{3}" required>
+
+                <button id="pay-btn" style="padding: 10px 20px; font-size: 16px;  color: white; border: none; cursor: pointer;">Оплатить</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p><a name="contacts"></a></p>
+        <div id="footer">
+            <div id="foot1">
+                <div id="adress"><p>Пгт. Октябрьское ул. Виноградная, 4</p></div>
+                <div id="number"><p>+7 (978) 777 77 77 / wrestgear@mail.ru</p></div>
+                <div id="logo"><img id="infimg1" src="../img/Логотип.png"></div>
+                <div id="apps">
+                    <a href="https://www.instagram.com/ismailmuzguli?igsh=NmJlZWg2dWxrN21y&utm_source=qr"><img class="conimg" src="../img/Инст.png"></a>
+                    <a href="https://t.me/j11bus57"><img class="conimg" src="../img/Тг.png"></a>
+                    <a href="https://vk.com/j1bus"><img class="conimg" src="../img/Вк.png"></a>
+                </div>
+                <div id="ooo"><p>2022-2025 OOO "wwwwww". Все права защищены.<br> Перепечатка и любое использование материалов возможно только <br> при наличии ссылки на первоисточник.</p></div>
+            </div>
+            <div id="foot2">
+                <h3>Навигация по сайту</h3>
+                <a class="flink" href="../html/Login.html">Регистрация/Вход</a>
+                <a class="flink" href="../index.html">На главную</a>
+                <a class="flink" href="../html/Catalog.html">Каталог</a>
+                <a class="flink" href="../html/Cart.html">Корзина</a>
+                <a class="flink">Техническая поддержка</a>
+                <a class="flink">Мобильное приложение</a>
+                <a class="flink">Часто задаваемые вопросы</a>
+            </div>
+            <div id="foot3">
+                <h3>О компании</h3>
+                <p>Контакты</p>
+                <p>Акции</p>
+                <p>Отзывы</p>
+                <p>Блог</p>
+                <p>Сотрудничество</p>
+                <p>Вакансии</p>
+                <p>Политика конфиденциальности</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const selectedItemsContainer = document.getElementById('selected-items');
+            const totalAmountElement = document.getElementById('total-amount');
+            const payBtn = document.getElementById('pay-btn');
+
+            if (cart.length === 0) {
+                selectedItemsContainer.innerHTML = '<p>Нет товаров для оплаты</p>';
+                payBtn.disabled = true;
+                return;
+            }
+
+            // Отображаем товары с чекбоксами
+            cart.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'selected-item';
+                itemDiv.innerHTML = `
+                    <input type="checkbox" class="item-checkbox" data-index="${index}" data-price="${item.price}" checked>
+                    <img src="${item.image}" alt="${item.name}" style="width: 50px; height: auto;">
+                    <span>${item.name} (Размер: ${item.size}) - ${item.price} ₽</span>
+                `;
+                selectedItemsContainer.appendChild(itemDiv);
+            });
+
+            // Функция для обновления итоговой суммы
+            function updateTotalPrice() {
+                const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+                let total = 0;
+                checkboxes.forEach(checkbox => {
+                    total += parseInt(checkbox.dataset.price);
+                });
+                totalAmountElement.textContent = total + ' ₽';
+            }
+
+            // Инициализация итоговой суммы
+            updateTotalPrice();
+
+            // Обновление суммы при изменении чекбоксов
+            document.querySelectorAll('.item-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', updateTotalPrice);
+            });
+
+            // Обработчик кнопки "Оплатить"
+            payBtn.addEventListener('click', () => {
+                const address = document.getElementById('address').value;
+                const cardNumber = document.getElementById('card-number').value;
+                const cardHolder = document.getElementById('card-holder').value;
+                const expiryDate = document.getElementById('expiry-date').value;
+                const cvv = document.getElementById('cvv').value;
+
+                if (!address || !cardNumber || !cardHolder || !expiryDate || !cvv) {
+                    alert('Пожалуйста, заполните все поля!');
+                    return;
+                }
+
+                const selectedItems = [];
+                const selectedIndexes = [];
+                document.querySelectorAll('.item-checkbox:checked').forEach(checkbox => {
+                    const index = parseInt(checkbox.dataset.index);
+                    selectedItems.push(cart[index]);
+                    selectedIndexes.push(index);
+                });
+
+                if (selectedItems.length === 0) {
+                    alert('Выберите хотя бы один товар для оплаты!');
+                    return;
+                }
+
+                // Сохраняем оплаченные товары для страницы доставки
+                localStorage.setItem('deliveredItems', JSON.stringify(selectedItems));
+
+                // Удаляем оплаченные товары из корзины
+                const updatedCart = cart.filter((_, index) => !selectedIndexes.includes(index));
+                localStorage.setItem('cart', JSON.stringify(updatedCart));
+
+                // Имитация успешной оплаты
+                alert('Оплата прошла успешно!');
+                window.location.href = '../html/Delivery.html';
+            });
+        });
+    </script>
+</body>
+</html>
